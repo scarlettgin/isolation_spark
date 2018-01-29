@@ -1,0 +1,35 @@
+[0m[[0m[31merror[0m] [0m[0m/home/security/mysparkapp/iforest_model/src/main/scala/IsolationForest.scala:1:12: object apache is not a member of package org[0m
+[0m[[0m[31merror[0m] [0m[0mimport org.apache.spark.SparkContext._[0m
+[0m[[0m[31merror[0m] [0m[0m           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/security/mysparkapp/iforest_model/src/main/scala/IsolationForest.scala:2:12: object apache is not a member of package org[0m
+[0m[[0m[31merror[0m] [0m[0mimport org.apache.spark.rdd.RDD[0m
+[0m[[0m[31merror[0m] [0m[0m           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/security/mysparkapp/iforest_model/src/main/scala/IsolationForest.scala:3:12: object apache is not a member of package org[0m
+[0m[[0m[31merror[0m] [0m[0mimport org.apache.spark.{SparkConf, SparkContext}[0m
+[0m[[0m[31merror[0m] [0m[0m           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/security/mysparkapp/iforest_model/src/main/scala/IsolationForest.scala:46:106: not found: type RDD[0m
+[0m[[0m[31merror[0m] [0m[0m    def getRandomSubsample(data: RDD[Array[Double]], sampleRatio: Double, seed: Long = Random.nextLong): RDD[Array[Double]] = {[0m
+[0m[[0m[31merror[0m] [0m[0m                                                                                                         ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/security/mysparkapp/iforest_model/src/main/scala/IsolationForest.scala:46:34: not found: type RDD[0m
+[0m[[0m[31merror[0m] [0m[0m    def getRandomSubsample(data: RDD[Array[Double]], sampleRatio: Double, seed: Long = Random.nextLong): RDD[Array[Double]] = {[0m
+[0m[[0m[31merror[0m] [0m[0m                                 ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/security/mysparkapp/iforest_model/src/main/scala/IsolationForest.scala:50:27: not found: type RDD[0m
+[0m[[0m[31merror[0m] [0m[0m    def buildForest(data: RDD[Array[Double]], numTrees: Int = 2, subSampleSize: Int = 256, seed: Long = Random.nextLong) : IsolationForest = {[0m
+[0m[[0m[31merror[0m] [0m[0m                          ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/security/mysparkapp/iforest_model/src/main/scala/IsolationForest.scala:61:24: not found: type RDD[0m
+[0m[[0m[31merror[0m] [0m[0m    def growTree(data: RDD[Array[Double]], maxHeight:Int, numColumns:Int, currentHeight:Int = 0): ITree = {[0m
+[0m[[0m[31merror[0m] [0m[0m                       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/security/mysparkapp/iforest_model/src/main/scala/IsolationForest.scala:58:37: type mismatch;[0m
+[0m[[0m[31merror[0m] [0m[0m found   : Array[Nothing][0m
+[0m[[0m[31merror[0m] [0m[0m required: Array[ITree][0m
+[0m[[0m[31merror[0m] [0m[0mNote: Nothing <: ITree, but class Array is invariant in type T.[0m
+[0m[[0m[31merror[0m] [0m[0mYou may wish to investigate a wildcard type such as `_ <: ITree`. (SLS 3.2.10)[0m
+[0m[[0m[31merror[0m] [0m[0m        IsolationForest(numSamples, trainedTrees)[0m
+[0m[[0m[31merror[0m] [0m[0m                                    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/security/mysparkapp/iforest_model/src/main/scala/IsolationForest.scala:91:24: not found: type SparkConf[0m
+[0m[[0m[31merror[0m] [0m[0m        val conf = new SparkConf()[0m
+[0m[[0m[31merror[0m] [0m[0m                       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/security/mysparkapp/iforest_model/src/main/scala/IsolationForest.scala:94:22: not found: type SparkContext[0m
+[0m[[0m[31merror[0m] [0m[0m        val sc = new SparkContext(conf)[0m
+[0m[[0m[31merror[0m] [0m[0m                     ^[0m
+[0m[[0m[31merror[0m] [0m[0m10 errors found[0m
