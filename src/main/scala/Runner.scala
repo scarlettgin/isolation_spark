@@ -12,7 +12,6 @@ case class ITreeLeaf(size: Long) extends ITree
 case class IsolationForest(num_samples: Long, trees: Array[ITree]) {
     def predict(x:Array[Double]): Double = {
         val predictions = trees.map(s => pathLength(x, s, 0)).toList
-        println(predictions.mkString(","))
         math.pow(2, -(predictions.sum/predictions.size)/cost(num_samples)) //Anomaly Score
     }
 
@@ -24,14 +23,12 @@ case class IsolationForest(num_samples: Long, trees: Array[ITree]) {
     final def pathLength(x:Array[Double], tree:ITree, path_length:Int): Double ={
         tree match{
             case ITreeLeaf(size) =>
-                println("Size: " + size + " path_lenth: " + path_length)
                 if (size > 1)
                     path_length + cost(size)
                 else 
                     path_length + 1
 
             case ITreeBranch(left, right, split_column, split_value) =>
-                println("Column:" + split_column + " split_value: " + split_value)
                 val sample_value = x(split_column)
 
                 if (sample_value < split_value)
@@ -76,7 +73,6 @@ object IsolationForest {
         val X_left = data.filter(s => s(split_column) < split_value).cache()
         val X_right = data.filter(s => s(split_column) >= split_value).cache()
 
-        //println("COLUMN: " + split_column + "MIN: " + col_min + " MAX: " + col_max + " SPLIT VALUE: " + split_value + " LEFTSIZE: " + X_left.count() + " RIGHTSIZE: " + X_right.count())
 
         new ITreeBranch(growTree(X_left, maxHeight, numColumns, currentHeight + 1),
             growTree(X_right, maxHeight, numColumns, currentHeight + 1),
@@ -103,20 +99,21 @@ object Runner{
             lines
                 .map(line => line.split(","))
                 .map(s => s.slice(1,s.length)) //lines in rows
-        val header = new SimpleCSVHeader(data.take(1)(0)) // we build our header with the first line
-        val rows = data.filter(line => line(0) != header.getColumn(0) ).map(s => s.map(_.toDouble)) // filter the header out and first row
+
+        val header = data.first()
+        val rows = data.filter(line => line(0) != header(0)).map(s => s.map(_.toDouble))
 
         println("Loaded CSV File...")
-        println(header.name2column.keys.mkString("\n"))
-        println(rows.take(10).deep.mkString("\n"))
+        println(header.mkString("\n"))
+        println(rows.take(5).deep.mkString("\n"))
 
         val forest = IsolationForest.buildForest(rows, numTrees=10)
 
-        val result_rdd = rows.map(row => forest.predict(row))
+        val result_rdd = rows.map(row => row ++ Array(forest.predict(row)))
 
-        result_rdd.coalesce(1).saveAsTextFile("file:///tmp/predict_label")
+        result_rdd.map(lines => lines.mkString(",")).repartition(1).saveAsTextFile("file:///tmp/predict_label")
 
-        val local_rows = rows.take(100)
+        val local_rows = rows.take(10)
         for(row <- local_rows){
             println("ForestScore", forest.predict(row))
         }
@@ -126,14 +123,3 @@ object Runner{
 
 }
 
-
-class SimpleCSVHeader(header:Array[String]) extends Serializable {
-    val name2column = header.zipWithIndex.toMap
-    val column2name = name2column.map(_.swap)
-
-    def apply(array:Array[String], key:String):String = array(name2column(key))
-    def apply(array:Array[String], key:Int):String = array(key)
-
-    def getIndex(key:String):Int = name2column(key)
-    def getColumn(key:Int):String = column2name(key)
-}
